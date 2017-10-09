@@ -38,10 +38,10 @@ def ecsTemplate = new ECSTaskTemplate(
 
 logger.info("Retrieving ecs cloud config by descriptor")
 def ecsCloud = new ECSCloud(
-  name="name",
+  name="ecs_slave_runner",
   templates=Arrays.asList(ecsTemplate),
   credentialsId=null,
-  cluster="arn:aws:ecs:eu-west-1:${accountId}:cluster/${ecsClusterName}",
+  cluster="arn:aws:ecs:${awsRegion}:${accountId}:cluster/${ecsClusterName}",
   regionName="${awsRegion}",
   jenkinsUrl="http://${jenkinsIP}:8080/jenkins",
   slaveTimoutInSeconds=60

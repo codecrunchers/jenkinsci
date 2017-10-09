@@ -25,16 +25,19 @@ Leave GITHUB_APP_CLIENT_ID && GITHUB_APP_CLIENT_SECRET blank for local access, u
  
 
 # Env Vars
-`GITHUB_APP_CLIENT_ID`
+* `GITHUB_APP_CLIENT_ID`
 Use this for guithub authentication
-`GITHUB_APP_CLIENT_SECRET`
+* `GITHUB_APP_CLIENT_SECRET`
 See above
-`ECS_CLUSTER`
+* `ECS_CLUSTER`
 The name of the ECS Cluster used for Slaves
-`AWS_ACCOUNT_ID`
+* `AWS_ACCOUNT_ID`
 So we can build the cluster name
-`JENKINS_IP`
+* `JENKINS_IP`
 IP for Slave->Master connection
+* `AWS_REGION`
+defaults to "eu-west-1";
+
 *
 *
 *

@@ -9,6 +9,8 @@ Logger logger = Logger.getLogger("ecs-cluster")
 String accountId = System.getenv("AWS_ACCOUNT_ID")?:null;
 String ecsClusterName = System.getenv("ECS_CLUSTER")?:null;
 String jenkinsIP = System.getenv("JENKINS_IP")?:null;
+String awsRegion = System.getenv("AWS_REGION")?:"eu-west-1";
+
 if (!accountId || !ecsClusterName || !jenkinsIP){
     logger.info("Not configuring Cloud, env vars missing")
     return
@@ -40,7 +42,7 @@ def ecsCloud = new ECSCloud(
   templates=Arrays.asList(ecsTemplate),
   credentialsId=null,
   cluster="arn:aws:ecs:eu-west-1:${accountId}:cluster/${ecsClusterName}",
-  regionName="us-east-1",
+  regionName="${awsRegion}",
   jenkinsUrl="http://${jenkinsIP}:8080/jenkins",
   slaveTimoutInSeconds=60
 )

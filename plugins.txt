@@ -1,0 +1,13 @@
+git
+workflow-job
+nodejs
+github-oauth
+sonar
+embeddable-build-status
+ssh-agent
+ws-cleanup
+workflow-aggregator
+slack
+build-monitor-plugin
+amazon-ecs
+

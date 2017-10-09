@@ -6,14 +6,13 @@ import com.cloudbees.jenkins.plugins.amazonecs.ECSCloud
 
 Logger logger = Logger.getLogger("ecs-cluster")
 
-String accountId = System.getenv("AWS_ACCOUNTT_ID")?:null;
+String accountId = System.getenv("AWS_ACCOUNT_ID")?:null;
 String ecsClusterName = System.getenv("ECS_CLUSTER")?:null;
-String jenkins_ip = System.getenv("JEKNINS_IP")?:null;
-if (!accountId || !ecsClusterName || !jenkins_ip){
-    logger.info("Not configuring Cloud")
+String jenkinsIP = System.getenv("JENKINS_IP")?:null;
+if (!accountId || !ecsClusterName || !jenkinsIP){
+    logger.info("Not configuring Cloud, env vars missing")
     return
 }
-
 
 logger.info("Loading Jenkins")
 instance = Jenkins.getInstance()
@@ -40,9 +39,9 @@ def ecsCloud = new ECSCloud(
   name="name",
   templates=Arrays.asList(ecsTemplate),
   credentialsId=null,
-  cluster="arn:aws:ecs:eu-west-1:${AWS_ACCOUNTT_ID}:cluster/${ecsClusterName}",
+  cluster="arn:aws:ecs:eu-west-1:${accountId}:cluster/${ecsClusterName}",
   regionName="us-east-1",
-  jenkinsUrl="http://${jenkins_ip}:8080/jenkins",
+  jenkinsUrl="http://${jenkinsIP}:8080/jenkins",
   slaveTimoutInSeconds=60
 )
 

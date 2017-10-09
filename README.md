@@ -31,9 +31,9 @@ Use this for guithub authentication
 See above
 `ECS_CLUSTER`
 The name of the ECS Cluster used for Slaves
-`AWS_ACCOUNTID`
+`AWS_ACCOUNT_ID`
 So we can build the cluster name
-`JEKNINS_IP`
+`JENKINS_IP`
 IP for Slave->Master connection
 *
 *

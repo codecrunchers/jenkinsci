@@ -3,14 +3,14 @@ import java.util.logging.Logger
 import com.cloudbees.jenkins.plugins.amazonecs.ECSTaskTemplate
 import jenkins.model.*
 import com.cloudbees.jenkins.plugins.amazonecs.ECSCloud
-
 Logger logger = Logger.getLogger("ecs-cluster")
 logger.info("Loading Jenkins")
+
 instance = Jenkins.getInstance()
 def clouds = instance.clouds
 
 if(clouds.size() > 0){
-    logger.info("Cloud in Place")
+    logger.info("Cloud in Place, not adding any")
     return
 }
 
@@ -26,7 +26,7 @@ if (!accountId || !ecsClusterName || !jenkinsIP){
 }
 
 
-logger.info("Creating template")
+logger.info("Creating template Node")
 def ecsTemplate = new ECSTaskTemplate(
   templateName="nodejs_slave",
   label="nodejs_slave",
@@ -41,6 +41,24 @@ def ecsTemplate = new ECSTaskTemplate(
   extraHosts=null,
   mountPoints=null
 )
+
+logger.info("Creating template Java")
+def ecsTemplate = new ECSTaskTemplate(
+  templateName="java_slave",
+  label="java_slave",
+  image="codecrunchers/jenkins-java-slave:latest",
+  remoteFSRoot="/home/java/work",
+  memory=0,
+  memoryReservation=850,
+  cpu=512,
+  privileged=false,
+  logDriverOptions=null,
+  environments=null,
+  extraHosts=null,
+  mountPoints=null
+)
+
+
 
 
 logger.info("Retrieving ecs cloud config by descriptor")

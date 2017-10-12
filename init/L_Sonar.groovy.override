@@ -2,7 +2,14 @@ import jenkins.model.*
 import hudson.plugins.sonar.*
 import hudson.plugins.sonar.model.*
 import static hudson.plugins.sonar.utils.SQServerVersions.SQ_5_3_OR_HIGHER;
-println("------->Configuring Sonar")
+import java.util.logging.Logger
+
+Logger logger = Logger.getLogger("")
+logger.info("Creating The Seed Build Job")
+
+
+
+logger.info("------->Configuring Sonar")
 def inst = Jenkins.instance
 def SonarGlobalConfiguration sonar_conf = inst.getDescriptor(SonarGlobalConfiguration.class)
 def sonar_inst = new SonarInstallation(
@@ -27,7 +34,7 @@ sonar_installations.each {
 	installation = (SonarInstallation) it
 	if (sonar_inst.getName() == installation.getName()) {
 		sonar_inst_exists = true
-		println("Found existing installation: " + installation.getName())
+		logger.info("Found existing installation: " + installation.getName())
 	}
 }
 

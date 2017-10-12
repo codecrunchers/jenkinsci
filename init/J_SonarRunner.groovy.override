@@ -1,8 +1,10 @@
 import jenkins.model.*
 import hudson.plugins.sonar.*
 import hudson.tools.*
+import java.util.logging.Logger
 
-println("------->Configuring Sonar Runner")
+Logger logger = Logger.getLogger("")
+logger.info("------->Configuring Sonar Runner")
 
 def inst = Jenkins.getInstance()
 def desc = inst.getDescriptor("hudson.plugins.sonar.SonarRunnerInstallation")

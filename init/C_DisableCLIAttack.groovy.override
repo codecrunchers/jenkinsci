@@ -1,0 +1,47 @@
+import jenkins.*;
+import jenkins.model.*;
+import hudson.model.*;
+import java.util.logging.Logger
+Logger logger = Logger.getLogger("")
+
+
+// disabled CLI access over TCP listener (separate port)
+
+def p = AgentProtocol.all()
+    p.each { x ->
+        if (x.name.contains("CLI")) {
+            p.remove(x);
+            logger.info("Removed CLI Access for ${x}");
+        }
+    }
+
+// disable CLI access over /cli URL
+def removal = { lst ->
+    lst.each { x -> 
+        if (x.getClass().name.contains("CLIAction")) {
+            lst.remove(x);
+            logger.info("Removed CLI Access for ${x}")
+        }
+    }
+}
+
+def j = Jenkins.instance;
+removal(j.getExtensionList(RootAction.class));
+removal(j.actions);
+
+
+//https://wiki.jenkins-ci.org/display/JENKINS/Slave+To+Master+Access+Control
+
+def rule = Jenkins.instance.getExtensionList(jenkins.security.s2m.MasterKillSwitchConfiguration.class)[0].rule
+if(!rule.getMasterKillSwitch()) {
+    rule.setMasterKillSwitch(true);
+    logger.info('Disabled agent -> master security for cobertura.');
+}
+else {
+    logger.info('Nothing changed.  Agent -> master security already disabled.');
+}
+
+Jenkins.instance.getExtensionList(jenkins.security.s2m.MasterKillSwitchWarning.class)[0].disable(true);
+Jenkins.instance.save()
+
+

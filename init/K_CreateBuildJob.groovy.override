@@ -7,23 +7,25 @@ import javaposse.jobdsl.plugin.*;
 import jenkins.model.JenkinsLocationConfiguration;
 import com.cloudbees.plugins.credentials.domains.Domain;
 import jenkins.model.JenkinsLocationConfiguration;
-
 import org.jenkinsci.plugins.workflow.job.WorkflowJob;
 import org.jenkinsci.plugins.workflow.cps.CpsScmFlowDefinition;
 import jenkins.model.*
 import hudson.model.AbstractProject
+import java.util.logging.Logger
 
+Logger logger = Logger.getLogger("")
+logger.info("Creating The Seed Build Job")
 def giturl = System.getenv("GIT_REPO");
 if(giturl == ""){
-	println("--------------------------->>> You Must Set a Repo to Build");
-	println("--------------------------->>> e.g. --env GIT_REPO=git@github.com:Plnt9/poormans-pipeline.git");
+	logger.info("--------------------------->>> You Must Set a Repo to Build");
+	logger.info("--------------------------->>> e.g. --env GIT_REPO=git@github.com:Plnt9/a-repo.git");
 }
 
 def jobName = giturl.split("/")[giturl.split("/").length - 1] - ".git"
 def jenkins = Jenkins.instance;
 
 if(!jenkins.getAllItems().collect{it.fullName}.contains(jobName)){
-	println("--->Creating Project")
+	logger.info("--->Creating Project")
 	def scm = new GitSCM(giturl);
 	scm.branches = [new BranchSpec("*/master")];
 	def workflowJob = new WorkflowJob(jenkins, jobName);
@@ -34,13 +36,13 @@ if(!jenkins.getAllItems().collect{it.fullName}.contains(jobName)){
 	workflowJob.setConcurrentBuild(false);
 	workflowJob.save();
 	jenkins.add(workflowJob, workflowJob.name);
-	println("---> Adding SSH Key for Project");
+	logger.info("---> Adding SSH Key for Project");
 	def job = Jenkins.instance.getAllItems().collect{it.fullName == jobName ? it:null}
 	job = job[0];	
 	job.definition.scm.userRemoteConfigs[0].credentialsId = 'git';
 	job.save();
 }else {
-	println("---> Adding SSH Key for Project");
+	logger.info("---> Adding SSH Key for Project");
 	def job = Jenkins.instance.getAllItems().collect{it.fullName == jobName ? it:null}
 	job = job[0];	
 	if(job.definition.scm.userRemoteConfigs[0].credentialsId == 'git') {

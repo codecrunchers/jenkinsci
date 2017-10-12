@@ -1,7 +1,7 @@
 FROM jenkins/jenkins:2.84
 ENV DOCKER_COMPOSE_VERSION=1.15.0
 ENV TERRAFORM_VERSION=0.9.11
-VOLUME p9_backup
+VOLUME /p9_backups
 USER root
 #Init Scripts
 COPY init/*.groovy /usr/share/jenkins/ref/init.groovy.d/

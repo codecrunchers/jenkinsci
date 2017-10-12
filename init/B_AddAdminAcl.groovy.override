@@ -1,0 +1,22 @@
+import hudson.model.*
+import jenkins.model.*
+import hudson.security.*
+import java.util.logging.Logger
+Logger logger = Logger.getLogger("")
+
+logger.info("Set Up Admin")
+def instance = Jenkins.getInstance()
+
+String gitClientId = System.getenv("GITHUB_APP_CLIENT_ID")?:null;
+if(!gitClientId){
+    logger.info("No GitHub Auth, use local --- this is a security risk")
+    def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+        hudsonRealm.createAccount('admin','admin')
+        instance.setSecurityRealm(hudsonRealm)
+
+        def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+        instance.setAuthorizationStrategy(strategy)
+        instance.save()
+}
+logger.info("Set Up Admin Complete")
+

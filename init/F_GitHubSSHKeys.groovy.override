@@ -1,8 +1,9 @@
 import java.util.logging.Logger
 Logger logger = Logger.getLogger("")
-logger.info("-------> Retreiving SSH keys from s3")
+logger.info("-------> Retreiving SSH keys from s3 & overwriting")
 
 def home = System.getProperty('user.home')
+
 def keysFolder = '.ssh'
 def copyS3Content = "aws s3 cp s3://pipeline-creds ${home}/${keysFolder} --recursive"
 def execution = copyS3Content.execute()

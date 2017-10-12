@@ -4,7 +4,7 @@ ENV TERRAFORM_VERSION=0.9.11
 VOLUME /p9_backups
 USER root
 #Init Scripts
-COPY init/*.groovy /usr/share/jenkins/ref/init.groovy.d/
+COPY init/* /usr/share/jenkins/ref/init.groovy.d/
 #Add All Plugins
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 COPY ./config/FIRSTRUN.txt $JENKINS_HOME/FIRSTRUN.txt

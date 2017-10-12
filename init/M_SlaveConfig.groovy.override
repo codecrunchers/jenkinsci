@@ -10,13 +10,14 @@ instance = Jenkins.getInstance()
 def clouds = instance.clouds
 
 if(clouds.size() > 0){
-    logger.info("Cloud in Place, not adding any")
+    logger.info("Cloud in Place, Replacing")
     return
 }
 
 
 String accountId = System.getenv("AWS_ACCOUNT_ID")?:null;
 String ecsClusterName = System.getenv("ECS_CLUSTER")?:null;
+//http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html#instancedata-user-data-retrieval
 String jenkinsIP = new URL("http://169.254.169.254/latest/meta-data/local-ipv4").getText()?:null
 String awsRegion = System.getenv("AWS_REGION")?:"eu-west-1";
 
@@ -27,7 +28,7 @@ if (!accountId || !ecsClusterName || !jenkinsIP){
 
 
 logger.info("Creating template Node")
-def ecsTemplate = new ECSTaskTemplate(
+def ecsTemplateNode = new ECSTaskTemplate(
   templateName="nodejs_slave",
   label="nodejs_slave",
   image="codecrunchers/jenkins-node-slave:latest",
@@ -43,7 +44,7 @@ def ecsTemplate = new ECSTaskTemplate(
 )
 
 logger.info("Creating template Java")
-def ecsTemplate = new ECSTaskTemplate(
+def ecsTemplateJava = new ECSTaskTemplate(
   templateName="java_slave",
   label="java_slave",
   image="codecrunchers/jenkins-java-slave:latest",
@@ -64,7 +65,7 @@ def ecsTemplate = new ECSTaskTemplate(
 logger.info("Retrieving ecs cloud config by descriptor")
 def ecsCloud = new ECSCloud(
   name="ecs_slave_runner",
-  templates=Arrays.asList(ecsTemplate),
+  templates=Arrays.asList(ecsTemplateNode,ecsTemplateJava),
   credentialsId=null,
   cluster="arn:aws:ecs:${awsRegion}:${accountId}:cluster/${ecsClusterName}",
   regionName="${awsRegion}",
@@ -73,7 +74,6 @@ def ecsCloud = new ECSCloud(
 )
 
 logger.info("Gettings clouds")
-def clouds = instance.clouds
 clouds.add(ecsCloud)
 logger.info("Saving jenkins")
 instance.save()

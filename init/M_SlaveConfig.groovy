@@ -43,7 +43,7 @@ def ecsCloud = new ECSCloud(
   credentialsId=null,
   cluster="arn:aws:ecs:${awsRegion}:${accountId}:cluster/${ecsClusterName}",
   regionName="${awsRegion}",
-  jenkinsUrl="http://${jenkinsIP}:8080/jenkins",
+  jenkinsUrl="${jenkinsIP}",
   slaveTimoutInSeconds=60
 )
 

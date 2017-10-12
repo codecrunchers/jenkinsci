@@ -5,10 +5,19 @@ import jenkins.model.*
 import com.cloudbees.jenkins.plugins.amazonecs.ECSCloud
 
 Logger logger = Logger.getLogger("ecs-cluster")
+logger.info("Loading Jenkins")
+instance = Jenkins.getInstance()
+def clouds = instance.clouds
+
+if(clouds.size() > 0){
+    logger.info("Cloud in Place")
+    return
+}
+
 
 String accountId = System.getenv("AWS_ACCOUNT_ID")?:null;
 String ecsClusterName = System.getenv("ECS_CLUSTER")?:null;
-String jenkinsIP = System.getenv("JENKINS_IP")?:null;
+String jenkinsIP = new URL("http://169.254.169.254/latest/meta-data/local-ipv4").getText()?:null
 String awsRegion = System.getenv("AWS_REGION")?:"eu-west-1";
 
 if (!accountId || !ecsClusterName || !jenkinsIP){
@@ -16,17 +25,15 @@ if (!accountId || !ecsClusterName || !jenkinsIP){
     return
 }
 
-logger.info("Loading Jenkins")
-instance = Jenkins.getInstance()
 
 logger.info("Creating template")
 def ecsTemplate = new ECSTaskTemplate(
-  templateName="node-slave",
-  label="node-slave",
+  templateName="nodejs_slave",
+  label="nodejs_slave",
   image="codecrunchers/jenkins-node-slave:latest",
   remoteFSRoot="/home/node/work",
   memory=0,
-  memoryReservation=2048,
+  memoryReservation=512,
   cpu=512,
   privileged=false,
   logDriverOptions=null,
@@ -43,7 +50,7 @@ def ecsCloud = new ECSCloud(
   credentialsId=null,
   cluster="arn:aws:ecs:${awsRegion}:${accountId}:cluster/${ecsClusterName}",
   regionName="${awsRegion}",
-  jenkinsUrl="${jenkinsIP}",
+  jenkinsUrl="http://${jenkinsIP}:8080/jenkins/", //TODO: until I sort out consul
   slaveTimoutInSeconds=60
 )
 

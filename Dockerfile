@@ -1,15 +1,13 @@
 FROM jenkins/jenkins:2.84
 ENV DOCKER_COMPOSE_VERSION=1.15.0
 ENV TERRAFORM_VERSION=0.9.11
-ENV ITEM_ROOTDIR=/tmp/
+VOLUME p9_backup
 USER root
 #Init Scripts
 COPY init/*.groovy /usr/share/jenkins/ref/init.groovy.d/
 #Add All Plugins
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
 COPY ./config/FIRSTRUN.txt $JENKINS_HOME/FIRSTRUN.txt
-
-
 
 RUN apt-get update && \
     apt-get install -y sudo curl vim libltdl7 && \

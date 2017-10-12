@@ -5,6 +5,8 @@ configuration = JenkinsLocationConfiguration.get();
 configuration.setUrl(System.getenv("JENKINS_URL"));
 configuration.save();
 
+Jenkins.instance.setNumExecutors(5)
+
 
 
 

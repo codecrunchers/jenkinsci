@@ -8,10 +8,9 @@ logger.info("Loading Jenkins")
 
 instance = Jenkins.getInstance()
 def clouds = instance.clouds
-
 if(clouds.size() > 0){
     logger.info("Cloud in Place, Replacing")
-    return
+    clouds.remove(clouds.get(0))
 }
 
 
@@ -69,7 +68,7 @@ def ecsCloud = new ECSCloud(
   credentialsId=null,
   cluster="arn:aws:ecs:${awsRegion}:${accountId}:cluster/${ecsClusterName}",
   regionName="${awsRegion}",
-  jenkinsUrl="http://${jenkinsIP}:8080/jenkins/", //TODO: until I sort out consul
+  jenkinsUrl="http://${jenkinsIP}:8080/jenkins/", //TODO: until I sort out consul, if the container is migrated to another host, this may be incorrect. Try scale in/out locking and tagging the task so that it can onl come up on this ip/instance (see README)
   slaveTimoutInSeconds=60
 )
 

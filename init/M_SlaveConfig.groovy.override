@@ -29,12 +29,12 @@ if (!accountId || !ecsClusterName || !jenkinsIP){
 
 logger.info("Creating template Node")
 def ecsTemplateNode = new ECSTaskTemplate(
-  templateName="nodejs_slave",
+  templateName="nodejs_slave-${ecsClusterName}",
   label="nodejs_slave",
   image="codecrunchers/jenkins-node-slave:latest",
   remoteFSRoot="/home/node/work",
   memory=0,
-  memoryReservation=512,
+  memoryReservation=2048,
   cpu=512,
   privileged=false,
   logDriverOptions=null,
@@ -45,7 +45,7 @@ def ecsTemplateNode = new ECSTaskTemplate(
 
 logger.info("Creating template Java")
 def ecsTemplateJava = new ECSTaskTemplate(
-  templateName="java_slave",
+  templateName="java_slave-${ecsClusterName}",
   label="java_slave",
   image="codecrunchers/jenkins-java-slave:latest",
   remoteFSRoot="/home/java/work",
@@ -64,7 +64,7 @@ def ecsTemplateJava = new ECSTaskTemplate(
 
 logger.info("Retrieving ecs cloud config by descriptor")
 def ecsCloud = new ECSCloud(
-  name="ecs_slave_runner",
+  name="${ecsClusterName}",
   templates=Arrays.asList(ecsTemplateNode,ecsTemplateJava),
   credentialsId=null,
   cluster="arn:aws:ecs:${awsRegion}:${accountId}:cluster/${ecsClusterName}",

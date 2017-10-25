@@ -30,10 +30,10 @@ logger.info("Creating template Node")
 def ecsTemplateNode = new ECSTaskTemplate(
   templateName="nodejs_slave-${ecsClusterName}",
   label="nodejs_slave",
-  image="codecrunchers/jenkins-node-slave:latest",
+  image="234585392744.dkr.ecr.eu-west-1.amazonaws.com/prod-pipeline/nodejs_slave:latest",
   remoteFSRoot="/home/node/work",
   memory=0,
-  memoryReservation=2048,
+  memoryReservation=1536,
   cpu=512,
   privileged=false,
   logDriverOptions=null,
@@ -41,30 +41,12 @@ def ecsTemplateNode = new ECSTaskTemplate(
   extraHosts=null,
   mountPoints=null
 )
-
-logger.info("Creating template Java")
-def ecsTemplateJava = new ECSTaskTemplate(
-  templateName="java_slave-${ecsClusterName}",
-  label="java_slave",
-  image="codecrunchers/jenkins-java-slave:latest",
-  remoteFSRoot="/home/java/work",
-  memory=0,
-  memoryReservation=850,
-  cpu=512,
-  privileged=false,
-  logDriverOptions=null,
-  environments=null,
-  extraHosts=null,
-  mountPoints=null
-)
-
-
 
 
 logger.info("Retrieving ecs cloud config by descriptor")
 def ecsCloud = new ECSCloud(
   name="${ecsClusterName}",
-  templates=Arrays.asList(ecsTemplateNode,ecsTemplateJava),
+  templates=Arrays.asList(ecsTemplateNode),
   credentialsId=null,
   cluster="arn:aws:ecs:${awsRegion}:${accountId}:cluster/${ecsClusterName}",
   regionName="${awsRegion}",

@@ -1,4 +1,4 @@
-FROM jenkins/jenkins:2.84
+FROM jenkins/jenkins:2.86
 VOLUME /p9_backups
 ENV TERRAFORM_VERSION=0.9.11
 

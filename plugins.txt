@@ -9,3 +9,5 @@ workflow-aggregator
 slack
 amazon-ecs
 thinBackup
+dependency-check-jenkins-plugin
+nodejs

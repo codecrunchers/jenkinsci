@@ -10,3 +10,5 @@ slack
 amazon-ecs
 thinBackup
 nodejs
+build-monitor-plugin
+blueocean

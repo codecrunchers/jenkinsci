@@ -2,6 +2,8 @@
 
 AWS Aligned Jenkins for use with Planet 9 [P9 AWS Pipeline] (aws-pipeline-v2)
 
+# N.B The ECS Plugin is not working, build and install this one : https://github.com/codecrunchers/amazon-ecs-plugin
+
 ## To Build 
 * `docker build -t planet9/jenkins .` or `docker build --no-cache -t planet9/jenkins .`
 
